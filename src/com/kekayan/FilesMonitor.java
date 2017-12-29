@@ -85,12 +85,19 @@ public class FilesMonitor extends Thread implements Subject {
         WatchKey key;
         while ((key = watchService.take()) != null) {
             for (WatchEvent<?> event : key.pollEvents()) {
-
+                if (event.kind().toString().equals("ENTRY_CREATE"))
                 events.add(
                         "File : " + event.context() + " Created.");
+                if (event.kind().toString().equals("ENTRY_DELETE"))
+                    events.add(
+                            "File : " + event.context() + " Deleted.");
+                if (event.kind().toString().equals("ENTRY_MODIFY"))
+                    events.add(
+                            "File : " + event.context() + " Modified.");
 
-                key.reset();
+
             }
+            key.reset();
         }
 
     }
